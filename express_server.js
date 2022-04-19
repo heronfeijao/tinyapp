@@ -51,6 +51,18 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
+app.post("/urls/:id/delete", (req, res) => {
+  delete urlDatabase[req.params.id];
+  res.redirect('/urls');
+});
+
+// EDIT
+app.post("/urls/:id/edit", (req, res) => {
+  console.log(req.body);
+  urlDatabase[req.params.id] = req.body.editURL;
+  res.redirect('/urls');
+});
+
 // eslint-disable-next-line func-style
 function generateRandomString() {
   const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
