@@ -9,8 +9,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn3": {
+    longURL: "http://www.lighthouselabs.ca",
+    userID: "userRandomID"
+  },
+  "9sm5xK": {
+    longURL: "http://www.google.com",
+    userID: "user2RandomID"
+  },
 };
 
 const users = {
@@ -27,7 +33,7 @@ const users = {
 };
 
 app.get("/", (req, res) => {
-  // res.send('Hello!');
+  res.send('Hello!');
 });
 
 app.get("/urls.json", (req, res) => {
@@ -39,13 +45,12 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-// app.get("/hello", (req, res) => {
-//   const templateVars = { greeting: 'Hello World!' };
-//   res.render("hello_world", templateVars);
-// });
-
 app.get("/urls/new", (req, res) => {
   const templateVars = { urls: urlDatabase, shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: users[req.cookies['user_id']] };
+  if (!templateVars.user) {
+    res.redirect("/login");
+    return;
+  }
   res.render("urls_new", templateVars);
 });
 
@@ -56,15 +61,24 @@ app.get("/urls/:shortURL", (req, res) => {
 
 // CREATE
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
+  const user = users[req.cookies['user_id']];
+  if (!user) {
+    res.redirect("/login");
+    return;
+  }
   const shortURL = generateRandomString();
-  urlDatabase[shortURL] = req.body.longURL;
+  urlDatabase[shortURL] = { longURL: req.body.longURL, userID: req.cookies['user_id']};
+  console.log(urlDatabase);
   res.redirect(`/urls/${shortURL}`);
-  // res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL];
+  if (!urlDatabase[req.params.shortURL]) {
+    res.statusCode = 400;
+    res.send('Invalid URL id');
+    return;
+  }
+  const longURL = urlDatabase[req.params.shortURL].longURL;
   res.redirect(longURL);
 });
 
@@ -76,7 +90,7 @@ app.post("/urls/:id/delete", (req, res) => {
 
 // EDIT
 app.post("/urls/:id/edit", (req, res) => {
-  urlDatabase[req.params.id] = req.body.editURL;
+  urlDatabase[req.params.id].longURL = req.body.editURL;
   res.redirect('/urls');
 });
 
