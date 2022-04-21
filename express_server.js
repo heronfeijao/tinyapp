@@ -4,7 +4,11 @@ const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
 const bcrypt = require('bcryptjs');
+const methodOverride = require('method-override');
 const cookieSession = require('cookie-session');
+const morgan = require('morgan');
+app.use(morgan('dev'));
+app.use(methodOverride('_method'));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieSession({
@@ -107,7 +111,7 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 // DELETE ------------------------------------------------------------------------------------------
-app.post("/urls/:id/delete", (req, res) => {
+app.delete("/urls/:id", (req, res) => {
   const user = req.session.user_id;
   if (!urlDatabase[req.params.id] || user !== urlDatabase[req.params.id].userID) {
     res.statusCode = 400;
@@ -119,7 +123,7 @@ app.post("/urls/:id/delete", (req, res) => {
 });
 
 // EDIT ------------------------------------------------------------------------------------------
-app.post("/urls/:id/edit", (req, res) => {
+app.put("/urls/:id", (req, res) => {
   const user = req.session.user_id;
   if (!urlDatabase[req.params.id] || user !== urlDatabase[req.params.id].userID) {
     res.statusCode = 400;
