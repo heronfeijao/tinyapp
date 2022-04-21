@@ -14,39 +14,55 @@
 <body>
   <%- include('partials/_header') %>
     <main style="margin: 1em;">
-      <h3>My URLs</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Short URL</th>
-            <th scope="col">Long URL</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% for(let url in urls) { %>
+      <% if (user) { %>
+        <h3>My URLs</h3>
+        <table class="table">
+          <thead>
             <tr>
-              <td>
-                <%= url %>
-              </td>
-              <td>
-                <%= urls[url].longURL %>
-              </td>
-              <td>
-                <form method="GET" action="/urls/<%= url %>">
-                  <button type="submit" class="btn btn-outline-primary">Edit</button>
-                </form>
-              </td>
-              <td>
-                <form method="POST" action="/urls/<%= url %>/delete">
-                  <button type="submit" class="btn btn-outline-danger">Delete</button>
-                </form>
-              </td>
+              <th scope="col">Short URL</th>
+              <th scope="col">Long URL</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
             </tr>
-            <% } %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% for(let url in userDatabase) { %>
+              <tr>
+                <td>
+                  <%= url %>
+                </td>
+                <td>
+                  <%= urls[url].longURL %>
+                </td>
+                <td>
+                  <form method="GET" action="/urls/<%= url %>">
+                    <button type="submit" class="btn btn-outline-primary">Edit</button>
+                  </form>
+                </td>
+                <td>
+                  <form method="POST" action="/urls/<%= url %>/delete">
+                    <button type="submit" class="btn btn-outline-danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+              <% } %>
+          </tbody>
+        </table>
+        <% } else { %>
+          <img src="https://m.media-amazon.com/images/I/51knzZEmL2L._AC_SX569_.jpg" alt="youShallNotPass" style="height: 300px;width: auto">
+          <h1>Sorry... Members only.</h1>
+          <p></p>
+          <h3>Already registered?</h3>
+          <div class="form-inline">
+            <p>Please log in here:&nbsp<p>
+              <a class href="/login">LOGIN</a>
+          </div>
+          <h3>New member?</h3>
+          <div class="form-inline">
+            <p>Please create a new account in here:&nbsp<p>
+              <a class href="/register">REGISTER</a>
+          </div>
+          <% } %>
     </main>
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
