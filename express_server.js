@@ -20,13 +20,31 @@ app.use(cookieSession({
 const urlDatabase = {
   "b2xVn3": {
     longURL: "http://www.lighthouselabs.ca",
-    userID: "hf1"
+    userID: "hf1",
+    visits: {
+      count: 0,
+      timestamp: [],
+      visitor: []
+    }
   },
   "9sm5xK": {
     longURL: "http://www.google.com",
-    userID: "hf1"
+    userID: "hf1",
+    visits: {
+      count: 0,
+      timestamp: [],
+      visitor: []
+    }
   },
 };
+
+for (const url in urlDatabase) {
+  const timestamp = urlDatabase[url].visits.timestamp;
+  for (let i = 0; i < timestamp.length; i++) {
+    console.log(urlDatabase[url].visits.timestamp[i]);
+    console.log(urlDatabase[url].visits.visitor[i]);
+  }
+}
 
 const users = {
   "hf1": {
@@ -107,6 +125,12 @@ app.get("/u/:shortURL", (req, res) => {
     return;
   }
   const longURL = urlDatabase[req.params.shortURL].longURL;
+  const visits = urlDatabase[req.params.shortURL].visits;
+
+  visits.timestamp.push(new Date().toLocaleString());
+  visits.visitor.push(req.session.user_id);
+  visits.count++;
+
   res.redirect(longURL);
 });
 
