@@ -21,6 +21,7 @@ const urlDatabase = {
   "b2xVn3": {
     longURL: "http://www.lighthouselabs.ca",
     userID: "hf1",
+    created: new Date().toLocaleString(),
     visits: {
       count: 0,
       timestamp: [],
@@ -30,6 +31,7 @@ const urlDatabase = {
   "9sm5xK": {
     longURL: "http://www.google.com",
     userID: "hf1",
+    created: new Date().toLocaleString(),
     visits: {
       count: 0,
       timestamp: [],
@@ -37,14 +39,6 @@ const urlDatabase = {
     }
   },
 };
-
-for (const url in urlDatabase) {
-  const timestamp = urlDatabase[url].visits.timestamp;
-  for (let i = 0; i < timestamp.length; i++) {
-    console.log(urlDatabase[url].visits.timestamp[i]);
-    console.log(urlDatabase[url].visits.visitor[i]);
-  }
-}
 
 const users = {
   "hf1": {
@@ -86,7 +80,11 @@ app.post("/urls", (req, res) => {
     return;
   }
   const shortURL = generateRandomString();
-  urlDatabase[shortURL] = { longURL: req.body.longURL, userID: req.session.user_id };
+  urlDatabase[shortURL] = { longURL: req.body.longURL, userID: req.session.user_id, created: new Date().toLocaleString(), visits: {
+    count: 0,
+    timestamp: [],
+    visitor: []
+  } };
   res.redirect(`/urls/${shortURL}`);
 });
 
