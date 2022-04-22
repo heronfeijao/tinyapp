@@ -4,8 +4,8 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-!["Screenshot of main URLs Page"](https://github.com/heronfeijao/tinyapp/blob/main/docs/UrlsPage.png)
-!["screenshot of created URLs"](https://github.com/heronfeijao/tinyapp/blob/main/docs/NewUrl.png)
+!["Screenshot of main URLs Page"](./docs/new-url.png)
+!["Screenshot of created URLs"](./docs/new-url.png)
 
 ## Dependencies
 
@@ -16,7 +16,6 @@ TinyApp is a full stack web application built with Node and Express that allows 
 - body-parser
 - cookie-session
 - method-override (Stretches)
-
 
 ## Getting Started
 
